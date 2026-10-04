@@ -4,6 +4,7 @@ import { AppHeader } from "@/components/layout/app-header";
 import { Card } from "@/components/ui/card";
 import { InviteLink } from "@/components/groups/invite-link";
 import { MembersList } from "@/components/groups/members-list";
+import { ErrorState } from "@/components/layout/error-state";
 
 interface MiembrosPageProps {
   params: Promise<{ gid: string }>;
@@ -48,7 +49,7 @@ export default async function MiembrosPage({ params }: MiembrosPageProps) {
   const isAdmin = currentUserMembership?.role === "admin";
 
   // Get members
-  const { data: membersData } = await supabase
+  const { data: membersData, error: membersError } = await supabase
     .from("group_members")
     .select(
       `
@@ -61,15 +62,30 @@ export default async function MiembrosPage({ params }: MiembrosPageProps) {
       )
     `
     )
-    .eq("group_id", gid)
-    .order("profiles.display_name", { ascending: true });
+    .eq("group_id", gid);
 
-  const members = (membersData || []).map((member) => ({
-    userId: member.user_id,
-    name: member.profiles?.nickname || member.profiles?.display_name || "Jugador",
-    position: member.profiles?.position,
-    role: member.role as "admin" | "member",
-  }));
+  if (membersError) {
+    return (
+      <>
+        <AppHeader title="Miembros" backHref={`/g/${gid}`} />
+        <div className="mx-auto w-full max-w-screen-sm px-4 py-6">
+          <ErrorState description="No pudimos cargar los miembros." />
+        </div>
+      </>
+    );
+  }
+
+  const sortedMembers = (membersData || [])
+    .map((member) => ({
+      userId: member.user_id,
+      name: member.profiles?.nickname || member.profiles?.display_name || "Jugador",
+      position: member.profiles?.position,
+      role: member.role as "admin" | "member",
+      displayName: member.profiles?.display_name || "",
+    }))
+    .sort((a, b) => a.displayName.localeCompare(b.displayName, "es-AR"));
+
+  const members = sortedMembers.map(({ displayName, ...rest }) => rest);
 
   return (
     <>

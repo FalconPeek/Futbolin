@@ -86,12 +86,8 @@ test.describe("Cuenta y grupo (e2e)", () => {
     await expect(page.getByText("2 miembros", { exact: true })).toBeVisible();
   });
 
-  // HALLAZGO H1 (ver el reporte de T44): /g/<gid>/miembros ordena con
-  // .order("profiles.display_name"), PostgREST responde PGRST100 y la página ignora el error:
-  // la lista de miembros sale vacía. Cuando se arregle (order con referencedTable: "profiles"),
-  // este test pasa a verde y Playwright lo marca como fallo: sacá la línea test.fail().
+  // Regresión de H1 (T44/T50): la lista salía vacía por un .order() inválido sobre profiles.
   test("la lista de miembros muestra a todos los integrantes", async ({ page }) => {
-    test.fail(true, "H1: la página de miembros no lista a nadie (PGRST100 al ordenar)");
 
     const owner = await createUser("Dueña Del Grupo");
     const member = await createUser("Miembro Nuevo");
