@@ -9,6 +9,7 @@ import {
   tournamentResultSchema,
 } from "@/lib/validators/tournaments";
 import { roundRobin, bracket, FixtureRow } from "@/lib/tournaments/fixtures";
+import type { Database } from "@/lib/database.types";
 
 function shuffleArray<T>(array: T[]): T[] {
   const result = [...array];
@@ -325,8 +326,7 @@ export async function reportTournamentResult({
     return fail(parsed.error.issues[0]?.message ?? "Revisá los datos e intentá de nuevo.");
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rpcPayload: any = {
+  const rpcPayload: Database["public"]["Functions"]["report_tournament_result"]["Args"] = {
     p_match_id: matchId,
     p_home: parsed.data.home_score,
     p_away: parsed.data.away_score,

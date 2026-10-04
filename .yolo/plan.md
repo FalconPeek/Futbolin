@@ -726,8 +726,8 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el gate review queda en verde (lint, typecheck, sin `any` ni `console.log` en src/) y review.md lista los hallazgos en el formato de agents.md, revisando en particular divergencias con database.types.ts, colores o tamaños sueltos fuera de los tokens, textos sin voseo o sin sentence case y más de un Button primary por pantalla
 - tests: —
 - gate: review
-- estado: en_curso
-- nota: revisión hecha; el gate review espera el fix T48 (any en torneos)
+- estado: hecha
+- nota: revisión hecha; el gate review pasó tras el fix T48
 
 ### T48 — Quitar any de las acciones de torneos
 - rol: backend
@@ -737,7 +737,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: src/actions/tournaments.ts y su test quedan sin any: el payload de report_tournament_result usa los Args generados en database.types.ts y los mocks del test están tipados; los 19 tests siguen en verde y el gate review queda en verde
 - tests: src/actions/tournaments.test.ts
 - gate: src/actions/tournaments.test.ts
-- estado: en_curso
+- estado: hecha
 
 ### T49 — Tamaños de texto y radios con tokens del design system
 - rol: frontend
@@ -747,7 +747,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: ningún componente de src/components fuera de tests usa text-xs, text-sm, text-base, text-lg o text-xl de Tailwind ni rounded-xl: usan text-caption, text-small, text-body, text-title y rounded-lg; design-tokens.test.ts recorre src/components y src/app y falla si vuelven a aparecer
 - tests: src/components/design-tokens.test.ts
 - gate: src/components
-- estado: en_curso
+- estado: hecha
 
 ## Riesgos
 - Muchos agentes en paralelo sobre un solo repo y una sola base local: el typecheck ve archivos a medio escribir de otra tarea, dos `npm install` o dos `next build` simultáneos se pisan y un `db reset` rompe los tests de otro. → Dependencias y componentes de shadcn se instalan en el Setup y ninguna tarea instala paquetes; las tareas de base comparten `supabase/migrations/` y por eso corren en fila; ningún test resetea la base; las tareas de UI usan gates por ruta y el build corre solo en T43 y en los e2e, que van en fila. Si un gate falla solo por archivos fuera del alcance de la tarea, el director lo re-corre al cerrar la tanda antes de subir de modelo.

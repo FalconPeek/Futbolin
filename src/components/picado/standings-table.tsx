@@ -33,13 +33,13 @@ export function StandingsTable({
           "text-card-foreground"
         )}
       >
-        {caption && <caption className="text-left p-3 px-4 text-lg font-semibold">{caption}</caption>}
+        {caption && <caption className="text-left p-3 px-4 text-title font-semibold">{caption}</caption>}
         <thead>
           <tr>
             <th
               scope="col"
               className={cn(
-                "text-center text-xs font-bold uppercase tracking-widest",
+                "text-center label-caps",
                 "text-muted-foreground",
                 "w-7",
                 "p-2 px-3"
@@ -50,7 +50,7 @@ export function StandingsTable({
             <th
               scope="col"
               className={cn(
-                "text-left text-xs font-bold uppercase tracking-widest",
+                "text-left label-caps",
                 "text-muted-foreground",
                 "p-2"
               )}
@@ -62,7 +62,7 @@ export function StandingsTable({
                 key={col}
                 scope="col"
                 className={cn(
-                  "text-center text-xs font-bold uppercase tracking-widest",
+                  "text-center label-caps",
                   "text-muted-foreground",
                   "p-2",
                   "px-1.5",
@@ -76,7 +76,7 @@ export function StandingsTable({
               <th
                 scope="col"
                 className={cn(
-                  "text-center text-xs font-bold uppercase tracking-widest",
+                  "text-center label-caps",
                   "text-muted-foreground",
                   "p-2",
                   "px-1.5",
@@ -91,7 +91,7 @@ export function StandingsTable({
               <th
                 scope="col"
                 className={cn(
-                  "text-center text-xs font-bold uppercase tracking-widest",
+                  "text-center label-caps",
                   "text-muted-foreground",
                   "p-2",
                   "px-3"
@@ -120,7 +120,7 @@ export function StandingsTable({
               >
                 <td
                   className={cn(
-                    "text-center text-sm p-2 px-3",
+                    "text-center text-small p-2 px-3",
                     "font-bold whitespace-nowrap",
                     isQualified ? "text-primary font-bold" : "text-muted-foreground",
                     isCutLine && "border-b-2 border-b-primary"
@@ -131,7 +131,7 @@ export function StandingsTable({
                 <th
                   scope="row"
                   className={cn(
-                    "text-left text-sm font-semibold",
+                    "text-left text-small font-semibold",
                     "p-2",
                     "sticky left-0 bg-card",
                     "whitespace-nowrap"
@@ -152,7 +152,7 @@ export function StandingsTable({
                   <td
                     key={i}
                     className={cn(
-                      "text-center text-sm p-2 px-1.5",
+                      "text-center text-small p-2 px-1.5",
                       "whitespace-nowrap",
                       "tabular"
                     )}
@@ -162,7 +162,7 @@ export function StandingsTable({
                 ))}
                 <td
                   className={cn(
-                    "text-center text-sm p-2 px-1.5",
+                    "text-center text-small p-2 px-1.5",
                     "whitespace-nowrap",
                     "tabular"
                   )}
@@ -171,7 +171,7 @@ export function StandingsTable({
                 </td>
                 <td
                   className={cn(
-                    "text-center text-sm font-bold p-2 px-1.5",
+                    "text-center text-small font-bold p-2 px-1.5",
                     "whitespace-nowrap",
                     "text-foreground",
                     "tabular"
@@ -182,7 +182,7 @@ export function StandingsTable({
                 {showBuchholz && (
                   <td
                     className={cn(
-                      "text-center text-sm p-2 px-1.5",
+                      "text-center text-small p-2 px-1.5",
                       "whitespace-nowrap",
                       "tabular"
                     )}
@@ -191,7 +191,7 @@ export function StandingsTable({
                   </td>
                 )}
                 {showForm && (
-                  <td className={cn("text-center text-sm p-2 px-3", "whitespace-nowrap")}>
+                  <td className={cn("text-center text-small p-2 px-3", "whitespace-nowrap")}>
                     <div className="flex justify-center gap-0.5">
                       {(row.form || []).slice(-5).map((result, j) => (
                         <FormBadge key={j} result={result} />

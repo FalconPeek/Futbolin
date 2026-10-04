@@ -21,10 +21,8 @@ import {
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockRevalidatePath = revalidatePath as any;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockCreateClient = createClient as any;
+const mockRevalidatePath = vi.mocked(revalidatePath);
+const mockCreateClient = vi.mocked(createClient);
 
 function createMockClient(overrides?: Record<string, unknown>) {
   const mockFrom = vi.fn();
@@ -268,8 +266,7 @@ describe("tournaments actions", () => {
         }),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mockClient: any = {
+      const mockClient = {
         auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-1" } } }) },
         from: vi.fn((table: string) => {
           if (table === "tournaments") return mockChain;
@@ -279,7 +276,9 @@ describe("tournaments actions", () => {
         rpc: vi.fn(),
       };
 
-      mockCreateClient.mockResolvedValue(mockClient);
+      mockCreateClient.mockResolvedValue(
+        mockClient as unknown as Awaited<ReturnType<typeof createClient>>,
+      );
 
       const result = await startTournament({
         tournamentId: "tournament-1",
@@ -318,8 +317,7 @@ describe("tournaments actions", () => {
         }),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mockClient: any = {
+      const mockClient = {
         auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-1" } } }) },
         from: vi.fn((table: string) => {
           if (table === "tournaments") return mockChain;
@@ -329,7 +327,9 @@ describe("tournaments actions", () => {
         rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
       };
 
-      mockCreateClient.mockResolvedValue(mockClient);
+      mockCreateClient.mockResolvedValue(
+        mockClient as unknown as Awaited<ReturnType<typeof createClient>>,
+      );
 
       const result = await startTournament({
         tournamentId: "tournament-1",
@@ -380,8 +380,7 @@ describe("tournaments actions", () => {
         }),
       };
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mockClient: any = {
+      const mockClient = {
         auth: { getUser: vi.fn().mockResolvedValue({ data: { user: { id: "user-1" } } }) },
         from: vi.fn((table: string) => {
           if (table === "tournaments") return mockChain;
@@ -391,7 +390,9 @@ describe("tournaments actions", () => {
         rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
       };
 
-      mockCreateClient.mockResolvedValue(mockClient);
+      mockCreateClient.mockResolvedValue(
+        mockClient as unknown as Awaited<ReturnType<typeof createClient>>,
+      );
 
       const result = await startTournament({
         tournamentId: "tournament-1",

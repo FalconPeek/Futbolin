@@ -140,7 +140,7 @@ export function TournamentForm({ groupId }: TournamentFormProps) {
             />
             <div className="flex-1 min-w-0">
               <div className="text-small font-semibold">Liga</div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-caption text-muted-foreground">
                 Todos contra todos, gana el que suma más puntos.
               </div>
             </div>
@@ -167,7 +167,7 @@ export function TournamentForm({ groupId }: TournamentFormProps) {
             />
             <div className="flex-1 min-w-0">
               <div className="text-small font-semibold">Eliminación directa</div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-caption text-muted-foreground">
                 Llave con cruces; el que pierde se va.
               </div>
             </div>
