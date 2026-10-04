@@ -544,6 +544,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - tests: src/components/matches/match-detail.test.tsx
 - gate: src/components/matches/match-detail.test.tsx
 - estado: hecha
+- nota: reabierta: la página faltaba; la armó Sonnet
 
 ### T30 — Armar equipos
 - rol: frontend
