@@ -272,7 +272,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: `20261004000200_matches.sql` crea matches, match_players, mvp_votes, sus helpers, grants por columna y las RPC set_attendance, assign_teams, finalize_match, vote_mvp y get_match_mvp_summary; rls_matches.test.ts prueba que un no miembro no ve partidos, que un miembro no organizador no puede asignar equipos ni finalizar (NOT_ALLOWED), que finalize_match rechaza asistencias de más (INVALID_RESULT), que no se vota a uno mismo ni dos veces (NOT_ELIGIBLE, ALREADY_VOTED), que nadie lee votos ajenos y que el resumen devuelve los MVP empatados
 - tests: supabase/tests/rls_matches.test.ts
 - gate: supabase/tests/rls_matches.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T3 — Contrato de calificaciones y cartas
 - rol: backend
@@ -422,7 +422,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: hay un esquema zod por formulario de la sección Validadores (auth, perfil, grupo, código, partido, resultado, calificación, torneo, equipo, resultado de torneo) con mensajes en voseo, y validators.test.ts verifica un caso válido y uno inválido de cada uno, incluido "Las asistencias no pueden superar los goles."
 - tests: src/lib/validators/validators.test.ts
 - gate: src/lib/validators
-- estado: pendiente
+- estado: hecha
 
 ### T18 — Sesión y rutas protegidas
 - rol: backend
@@ -622,7 +622,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: Bracket dibuja una columna por ronda con roundLabel, cada cruce con punto de color, nombre, resultado tabular y penales entre paréntesis, "A definir" si falta un equipo, el ganador en font-semibold y scroll horizontal en mobile; bracket.test.tsx verifica los nombres de ronda, "A definir" y el ganador por penales
 - tests: src/components/tournaments/bracket.test.tsx
 - gate: src/components/tournaments/bracket.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T38 — Vista del torneo: tabla, fixture y llave
 - rol: frontend
@@ -662,7 +662,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: manifest.ts devuelve name y short_name "Picado", lang es-AR, start_url /grupos, display standalone, background_color y theme_color con los hex de `background` del tema oscuro de tokens.json y íconos 192 y 512 PNG (con uno maskable) generados con ImageResponse ("P" en Barlow Condensed 700 sobre primary); manifest.test.ts verifica esos campos y los tamaños
 - tests: src/app/manifest.test.ts
 - gate: src/app/manifest.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T42 — PWA: service worker y página sin conexión
 - rol: frontend

@@ -24,3 +24,5 @@ Una línea por decisión: qué, por qué.
 - Sin @vitejs/plugin-react: choca por peer deps de Babel 8 con shadcn y Vitest compila JSX solo con `"jsx": "react-jsx"` del tsconfig.
 - @types/node 24 (Node 24 LTS instalado) porque Vitest 5 pide ≥ 22.
 - Toaster de sonner con tema fijo "dark" y sin next-themes: el MVP tiene un solo tema.
+- vote_mvp y get_match_mvp_summary devuelven NOT_ALLOWED a quien no es miembro del grupo (NOT_ELIGIBLE queda para miembros que no jugaron); un partido inexistente y uno ajeno dan el mismo error para no revelar ids.
+- Las helpers y el trigger de core se revocan de anon y las políticas son `to authenticated` (corregido por el director sobre la entrega de T1 para cumplir el plan).
