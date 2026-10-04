@@ -553,7 +553,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: solo el organizador entra; TeamPicker muestra los confirmados con su OVR (de get_group_cards + computeOvr, "–" si es provisional), permite pasar cada uno a A, B o sin equipo, "Armar parejo" usa balanceTeams, muestra la suma de OVR por equipo y "Guardar equipos" llama a assignTeams; team-picker.test.tsx verifica mover jugadores, que Armar parejo reparte con balanceTeams y el payload de guardar
 - tests: src/components/matches/team-picker.test.tsx
 - gate: src/components/matches/team-picker.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T31 — Cargar resultado del partido
 - rol: frontend
@@ -563,7 +563,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: solo el organizador entra; ResultForm pide el resultado de cada equipo y goles y asistencias por jugador (inputMode numeric, h-tap), valida en el cliente con el esquema compartido y "Cerrar partido" llama a finalizeMatch; result-form.test.tsx verifica el error "Las asistencias no pueden superar los goles.", el de goles de más y el payload enviado
 - tests: src/components/matches/result-form.test.tsx
 - gate: src/components/matches/result-form.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T32 — Galería de cartas y carta del jugador
 - rol: frontend
@@ -613,7 +613,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: con el torneo en borrador, el organizador agrega equipos con nombre y un color de una paleta fija de 8 (el color solo como punto o franja), los renombra o quita, y "Empezar torneo" (deshabilitado con menos de 2) llama a startTournament; team-editor.test.tsx verifica agregar, quitar, el límite de 16 y el botón deshabilitado
 - tests: src/components/tournaments/team-editor.test.tsx
 - gate: src/components/tournaments/team-editor.test.tsx
-- estado: en_curso
+- estado: hecha
 
 ### T37 — Llave de eliminación
 - rol: frontend
@@ -643,7 +643,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: solo el organizador entra; TournamentResultForm pide goles de local y visitante, muestra los campos de penales solo en eliminación con empate, valida con el esquema compartido y "Guardar resultado" llama a reportTournamentResult; tournament-result-form.test.tsx verifica que los penales aparecen solo en eliminación con empate, el error de penales iguales y el payload
 - tests: src/components/tournaments/tournament-result-form.test.tsx
 - gate: src/components/tournaments/tournament-result-form.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T40 — Inicio del grupo
 - rol: frontend
