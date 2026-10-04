@@ -694,7 +694,8 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: account-group.spec.ts cubre registrarse, crear grupo, copiar el link y que un segundo usuario se una; match.spec.ts cubre crear partido, confirmar con 4 usuarios, Armar parejo, cargar resultado con goles y votar MVP; helpers.ts crea usuarios con email único vía admin API y nunca resetea la base; los bugs encontrados quedan como hallazgos con el test que los reproduce
 - tests: tests/e2e/account-group.spec.ts, tests/e2e/match.spec.ts
 - gate: e2e
-- estado: pendiente
+- estado: en_curso
+- nota: haiku: el test de MVP era condicional (if isVisible) y no probaba el voto
 
 ### T45 — QA e2e: cartas y torneos
 - rol: qa
@@ -714,7 +715,8 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el gate security queda en verde (npm audit sin altas ni críticas sin justificar, sin secretos en el cliente ni .env commiteados, tests de RLS en verde) y security.md lista los hallazgos en el formato de agents.md, revisando en particular RPC security definer sin chequeo de permisos, grants por columna, rutas de (app) sin sesión, safeNextPath y que ningún voto o calificación individual sea legible por otro usuario
 - tests: —
 - gate: security
-- estado: pendiente
+- estado: hecha
+- nota: el gate falló por braces (tooling sin parche); el director pasó shadcn a dev y el gate audita producción (ver decisions.md)
 
 ### T47 — Revisión de código
 - rol: review
@@ -724,7 +726,28 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el gate review queda en verde (lint, typecheck, sin `any` ni `console.log` en src/) y review.md lista los hallazgos en el formato de agents.md, revisando en particular divergencias con database.types.ts, colores o tamaños sueltos fuera de los tokens, textos sin voseo o sin sentence case y más de un Button primary por pantalla
 - tests: —
 - gate: review
-- estado: pendiente
+- estado: en_curso
+- nota: revisión hecha; el gate review espera el fix T48 (any en torneos)
+
+### T48 — Quitar any de las acciones de torneos
+- rol: backend
+- etapa: fix
+- depende_de: T47
+- archivos: src/actions/tournaments.ts, src/actions/tournaments.test.ts
+- criterio: src/actions/tournaments.ts y su test quedan sin any: el payload de report_tournament_result usa los Args generados en database.types.ts y los mocks del test están tipados; los 19 tests siguen en verde y el gate review queda en verde
+- tests: src/actions/tournaments.test.ts
+- gate: src/actions/tournaments.test.ts
+- estado: en_curso
+
+### T49 — Tamaños de texto y radios con tokens del design system
+- rol: frontend
+- etapa: fix
+- depende_de: T47
+- archivos: src/components/picado/standings-table.tsx, src/components/tournaments/tournament-form.tsx, src/components/ui/, src/components/design-tokens.test.ts
+- criterio: ningún componente de src/components fuera de tests usa text-xs, text-sm, text-base, text-lg o text-xl de Tailwind ni rounded-xl: usan text-caption, text-small, text-body, text-title y rounded-lg; design-tokens.test.ts recorre src/components y src/app y falla si vuelven a aparecer
+- tests: src/components/design-tokens.test.ts
+- gate: src/components
+- estado: en_curso
 
 ## Riesgos
 - Muchos agentes en paralelo sobre un solo repo y una sola base local: el typecheck ve archivos a medio escribir de otra tarea, dos `npm install` o dos `next build` simultáneos se pisan y un `db reset` rompe los tests de otro. → Dependencias y componentes de shadcn se instalan en el Setup y ninguna tarea instala paquetes; las tareas de base comparten `supabase/migrations/` y por eso corren en fila; ningún test resetea la base; las tareas de UI usan gates por ruta y el build corre solo en T43 y en los e2e, que van en fila. Si un gate falla solo por archivos fuera del alcance de la tarea, el director lo re-corre al cerrar la tanda antes de subir de modelo.

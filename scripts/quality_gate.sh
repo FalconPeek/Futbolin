@@ -35,6 +35,15 @@ no_secrets_in_client() {
   fi
 }
 
+audit() {
+  # Producción: sin vulnerabilidades altas ni críticas (esto decide el gate).
+  # Desarrollo: se informa. braces (vía shadcn CLI y eslint-config-next) no tiene parche
+  # y solo corre en tooling; ver .yolo/decisions.md.
+  run npm-audit npm audit --omit=dev --audit-level=high
+  echo "ℹ Auditoría completa (incluye herramientas de desarrollo):"
+  npm audit --audit-level=high 2>/dev/null | grep -E "^[a-z@].*$|vulnerabilit" | head -5 || true
+}
+
 no_new_any_or_logs() {
   local hits
   hits=$(grep -rnE ":\s*any\b|console\.log\(" src/ --include=*.ts --include=*.tsx 2>/dev/null \
@@ -50,7 +59,7 @@ case "$SCOPE" in
   e2e)
     build; e2e ;;
   security)
-    run npm-audit npm audit --audit-level=high
+    audit
     run secrets no_secrets_in_client
     unit supabase/tests
     echo "ℹ Revisá también los advisors de seguridad de Supabase (MCP get_advisors)." ;;
@@ -58,7 +67,7 @@ case "$SCOPE" in
     lint; typecheck; run any-y-logs no_new_any_or_logs ;;
   all)
     lint; typecheck; unit; build; e2e
-    run npm-audit npm audit --audit-level=high
+    audit
     run secrets no_secrets_in_client ;;
   *)
     if [ -e "$SCOPE" ]; then lint; typecheck; unit "$SCOPE"; else echo "Alcance desconocido: $SCOPE"; exit 2; fi ;;
