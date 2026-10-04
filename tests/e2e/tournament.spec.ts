@@ -493,10 +493,8 @@ test.describe("Torneos", () => {
   });
 
   test("eliminación: un 0-0 también pide penales", async ({ page }) => {
-    // HALLAZGO (app): TournamentResultForm calcula `isTie = homeScore === awayScore && homeScore > 0`,
-    // así que con 0-0 en eliminación no muestra los campos de penales, pero tournamentResultSchema
-    // (y la RPC) sí los exigen: el organizador queda con el error "cargá los penales" sin dónde cargarlos.
-    test.fail(true, "Hallazgo T45: el 0-0 en eliminación no muestra los campos de penales");
+    // En eliminación directa, cualquier empate (incluyendo 0-0) requiere penales.
+    // TournamentResultForm ahora muestra los campos de penales para 0-0.
 
     const owner = await createUser("Dueño");
     const member = await createUser("Miembro");

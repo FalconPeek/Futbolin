@@ -49,8 +49,8 @@ export function TournamentResultForm({
     (initial !== null && initial !== undefined ? initial.away_pens : null) as number | null
   );
 
-  // Show penalties only in eliminacion with a tie
-  const isTie = homeScore === awayScore && homeScore > 0;
+  // Show penalties only in eliminacion with a tie (including 0-0)
+  const isTie = homeScore === awayScore;
   const showPenalties = format === "eliminacion" && isTie;
 
   const handleSubmit = () => {

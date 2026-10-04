@@ -75,7 +75,7 @@ describe("TournamentResultForm", () => {
     expect(screen.queryByText(/En eliminación directa se define por penales/i)).not.toBeInTheDocument();
   });
 
-  it("shows penalties only in eliminacion with a tie", async () => {
+  it("shows penalties in eliminacion with a tie including 0-0", async () => {
     const user = userEvent.setup();
 
     render(
@@ -85,10 +85,11 @@ describe("TournamentResultForm", () => {
       />
     );
 
-    // Initially no penalties shown
-    expect(screen.queryByText(/En eliminación directa se define por penales/i)).not.toBeInTheDocument();
+    // Initially penalties shown because of 0-0 tie (initial state)
+    expect(screen.getByText(/En eliminación directa se define por penales/i)).toBeInTheDocument();
+    expect(screen.getAllByLabelText(/Penales de/)).toHaveLength(2);
 
-    // Enter a tie
+    // Change to a different tie (2-2)
     const homeInput = screen.getByRole("spinbutton", { name: /Goles de Local/i });
     const awayInput = screen.getByRole("spinbutton", { name: /Goles de Visitante/i });
 
@@ -98,9 +99,51 @@ describe("TournamentResultForm", () => {
     await user.clear(awayInput);
     await user.type(awayInput, "2");
 
-    // Now penalties should appear
+    // Penalties should still appear
     expect(screen.getByText(/En eliminación directa se define por penales/i)).toBeInTheDocument();
     expect(screen.getAllByLabelText(/Penales de/)).toHaveLength(2);
+  });
+
+  it("submits eliminacion 0-0 with penalties 5-4", async () => {
+    const user = userEvent.setup();
+    mockReportTournamentResult.mockResolvedValue({ ok: true });
+
+    render(
+      <TournamentResultForm
+        {...baseProps}
+        format="eliminacion"
+      />
+    );
+
+    // Penalties should be visible immediately due to 0-0 initial state
+    const penaltyInputs = screen.getAllByLabelText(/Penales de/);
+    expect(penaltyInputs).toHaveLength(2);
+
+    // Enter penalties for 0-0 tie
+    await user.clear(penaltyInputs[0]);
+    await user.type(penaltyInputs[0], "5");
+
+    await user.clear(penaltyInputs[1]);
+    await user.type(penaltyInputs[1], "4");
+
+    // Click submit
+    const submitButton = screen.getByRole("button", { name: /Guardar resultado/i });
+    await user.click(submitButton);
+
+    // Wait for async operation
+    await new Promise((resolve) => setTimeout(resolve, 0));
+
+    // Should have called the action with 0-0 and penalties 5-4
+    expect(mockReportTournamentResult).toHaveBeenCalledWith({
+      matchId: "match-1",
+      tournamentId: "tournament-1",
+      groupId: "group-1",
+      format: "eliminacion",
+      home_score: 0,
+      away_score: 0,
+      home_pens: 5,
+      away_pens: 4,
+    });
   });
 
   it("does not show penalties in eliminacion without a tie", async () => {

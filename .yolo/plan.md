@@ -778,7 +778,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: en eliminación cualquier empate, incluido 0-0, muestra los campos de penales (isTie sin la condición > 0); tournament-result-form.test.tsx cubre el 0-0 y el test e2e 'eliminación: un 0-0 también pide penales' pasa sin test.fail
 - tests: src/components/tournaments/tournament-result-form.test.tsx, tests/e2e/tournament.spec.ts
 - gate: src/components/tournaments/tournament-result-form.test.tsx
-- estado: en_curso
+- estado: hecha
 
 ## Riesgos
 - Muchos agentes en paralelo sobre un solo repo y una sola base local: el typecheck ve archivos a medio escribir de otra tarea, dos `npm install` o dos `next build` simultáneos se pisan y un `db reset` rompe los tests de otro. → Dependencias y componentes de shadcn se instalan en el Setup y ninguna tarea instala paquetes; las tareas de base comparten `supabase/migrations/` y por eso corren en fila; ningún test resetea la base; las tareas de UI usan gates por ruta y el build corre solo en T43 y en los e2e, que van en fila. Si un gate falla solo por archivos fuera del alcance de la tarea, el director lo re-corre al cerrar la tanda antes de subir de modelo.
