@@ -513,7 +513,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: /grupos lista los grupos del usuario con cantidad de miembros y estado vacío "Todavía no estás en ningún grupo" con "Crear grupo", /grupos/nuevo crea y lleva a /g/[gid], y /unirse/[code] muestra el nombre del grupo con "Unite al grupo" (o el error de link inválido); groups.test.tsx verifica lista, estado vacío y los errores del formulario
 - tests: src/components/groups/groups.test.tsx
 - gate: src/components/groups/groups.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T27 — Layout del grupo y miembros
 - rol: frontend
@@ -523,7 +523,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el layout del grupo da 404 a quien no es miembro y monta BottomNav con `pb-nav` (cada pantalla trae su AppHeader), y /miembros muestra miembros con Badge "Admin", el link de invitación con "Copiar link" y "Compartir" (Web Share API si existe), "Salir del grupo" y, solo para admins, "Quitar del grupo" y "Hacer admin"; members.test.tsx verifica que las acciones de admin solo aparecen para admins y que copiar arma la URL `/unirse/<code>`
 - tests: src/components/groups/members.test.tsx
 - gate: src/components/groups/members.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T28 — Partidos: lista y creación
 - rol: frontend
