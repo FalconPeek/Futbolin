@@ -108,6 +108,7 @@ Fuente exacta para las tareas. Si una regla no está acá, la decide el director
 - `leave_group(p_group_id uuid) → void`: si no es miembro `NOT_ALLOWED`; si es el único admin y quedan otros miembros `LAST_ADMIN`; borra su membresía; si el grupo queda sin miembros, borra el grupo.
 - `remove_member(p_group_id uuid, p_user_id uuid) → void`: solo admin, no a sí mismo (`NOT_ALLOWED`).
 - `set_member_role(p_group_id uuid, p_user_id uuid, p_role member_role) → void`: solo admin; degradar al último admin da `LAST_ADMIN`.
+- `get_invite_preview(p_code text) → table(group_id, name, member_count, is_member)`: para usuarios logueados con el código; código inexistente → sin filas. Agregada por el director para que /unirse muestre el nombre del grupo antes de unirse.
 
 ### RPC de partidos y MVP (T2)
 - `set_attendance(p_match_id uuid, p_status attendance_status) → void`: miembro del grupo, partido 'programado' (si no `MATCH_CLOSED`); upsert de su fila; al confirmar, si ya hay 2 × players_per_team confirmados `MATCH_FULL`; al darse de baja, team pasa a null.
@@ -492,7 +493,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: `/` manda a /grupos con sesión y muestra la portada (nombre "Picado" en font-display 700, una línea de qué es y "Ingresá" / "Creá tu cuenta") sin sesión, y /ingresar y /registrarme usan AuthForm con errores por campo y respetan `next`; auth-form.test.tsx verifica los campos de cada modo, el error de validación y el error devuelto por la acción
 - tests: src/components/auth/auth-form.test.tsx
 - gate: src/components/auth
-- estado: pendiente
+- estado: hecha
 
 ### T25 — Layout protegido y perfil
 - rol: frontend
@@ -502,7 +503,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el layout de (app) verifica la sesión en el servidor (redirige a /ingresar si no hay), y /perfil permite editar nombre, apodo y posición con ProfileForm y tiene "Salir de la cuenta"; profile-form.test.tsx verifica la carga de valores, el select con las 15 posiciones, el error de validación y el toast de guardado
 - tests: src/components/profile/profile-form.test.tsx
 - gate: src/components/profile
-- estado: pendiente
+- estado: hecha
 
 ### T26 — Mis grupos: lista, crear y unirse
 - rol: frontend
@@ -519,7 +520,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - etapa: construccion
 - depende_de: T9, T20, T25
 - archivos: src/app/(app)/g/[gid]/layout.tsx, src/app/(app)/g/[gid]/miembros/, src/components/groups/members-list.tsx, src/components/groups/invite-link.tsx, src/components/groups/members.test.tsx
-- criterio: el layout del grupo da 404 a quien no es miembro y monta AppHeader y BottomNav con `pb-nav`, y /miembros muestra miembros con Badge "Admin", el link de invitación con "Copiar link" y "Compartir" (Web Share API si existe), "Salir del grupo" y, solo para admins, "Quitar del grupo" y "Hacer admin"; members.test.tsx verifica que las acciones de admin solo aparecen para admins y que copiar arma la URL `/unirse/<code>`
+- criterio: el layout del grupo da 404 a quien no es miembro y monta BottomNav con `pb-nav` (cada pantalla trae su AppHeader), y /miembros muestra miembros con Badge "Admin", el link de invitación con "Copiar link" y "Compartir" (Web Share API si existe), "Salir del grupo" y, solo para admins, "Quitar del grupo" y "Hacer admin"; members.test.tsx verifica que las acciones de admin solo aparecen para admins y que copiar arma la URL `/unirse/<code>`
 - tests: src/components/groups/members.test.tsx
 - gate: src/components/groups/members.test.tsx
 - estado: pendiente

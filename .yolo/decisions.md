@@ -28,3 +28,5 @@ Una línea por decisión: qué, por qué.
 - Las helpers y el trigger de core se revocan de anon y las políticas son `to authenticated` (corregido por el director sobre la entrega de T1 para cumplir el plan).
 - Server actions: reciben un objeto tipado (no FormData), validan con los esquemas de src/lib/validators, devuelven ActionResult y no llaman a redirect(); si hay que navegar devuelven `{ redirectTo }` en data y el cliente hace router.push + router.refresh. Así se testean con el cliente mockeado y los formularios usan useActionState o startTransition por igual.
 - report_tournament_result con penales `default null` para que los tipos generados los marquen opcionales (ajuste del director sobre T4 antes de las acciones).
+- RPC get_invite_preview (security definer, solo con el código) para que /unirse muestre el nombre del grupo antes de unirse sin abrir la RLS de groups.
+- El layout del grupo monta solo la barra inferior; cada pantalla trae su AppHeader (el detalle de un partido necesita su propio "volver").

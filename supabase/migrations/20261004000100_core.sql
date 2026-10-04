@@ -383,3 +383,25 @@ revoke execute on function public.generate_invite_code() from public, anon, auth
 
 -- El trigger corre como dueño; nadie lo llama por la API
 revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
+-- Vista previa de una invitación: quien tiene el código ve el nombre del grupo antes de unirse.
+-- Código inexistente → sin filas.
+create or replace function public.get_invite_preview(p_code text)
+returns table (group_id uuid, name text, member_count int, is_member boolean)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select
+    g.id,
+    g.name,
+    (select count(*)::int from public.group_members gm where gm.group_id = g.id),
+    exists (select 1 from public.group_members gm where gm.group_id = g.id and gm.user_id = auth.uid())
+  from public.groups g
+  where g.invite_code = upper(trim(p_code))
+    and auth.uid() is not null
+$$;
+
+revoke execute on function public.get_invite_preview(text) from public, anon;
+grant execute on function public.get_invite_preview(text) to authenticated;

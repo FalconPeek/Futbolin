@@ -290,6 +290,11 @@ isOneToOne: false
               "display_name": string,"kind": Database["public"]['Enums']["rating_kind"],"nickname": string,"position": Database["public"]['Enums']["player_position"],"raters": number,"s1": number,"s2": number,"s3": number,"s4": number,"s5": number,"s6": number,"user_id": string
             }[]
                            },
+"get_invite_preview":
+{ Args: { "p_code": string }; Returns: {
+              "group_id": string,"is_member": boolean,"member_count": number,"name": string
+            }[]
+                           },
 "get_match_mvp_summary":
 { Args: { "p_match_id": string }; Returns: {
               "closed": boolean,"eligible": number,"mvp_ids": (string)[],"my_vote": string,"votes_cast": number

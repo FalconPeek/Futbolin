@@ -685,3 +685,35 @@ describe('T1: Core RLS and Profiles, Groups, Memberships', () => {
     });
   });
 });
+
+describe("get_invite_preview", () => {
+  it("muestra nombre y miembros a quien tiene el código, sin unirlo", async () => {
+    const owner = await newUser("Dueño");
+    const guest = await newUser("Invitado");
+    const created = await owner.client.rpc("create_group", { p_name: "Fútbol de los jueves" });
+    expect(created.error).toBeNull();
+    const groupId = created.data as unknown as string;
+    const group = await owner.client.from("groups").select("invite_code").eq("id", groupId).single();
+    expect(group.error).toBeNull();
+    const code = (group.data as unknown as { invite_code: string }).invite_code;
+
+    const preview = await guest.client.rpc("get_invite_preview", { p_code: code.toLowerCase() });
+    expect(preview.error).toBeNull();
+    const rows = preview.data as unknown as Array<{ group_id: string; name: string; member_count: number; is_member: boolean }>;
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ group_id: groupId, name: "Fútbol de los jueves", member_count: 1, is_member: false });
+
+    const stillHidden = await guest.client.from("groups").select("id").eq("id", groupId);
+    expect(stillHidden.data ?? []).toHaveLength(0);
+  });
+
+  it("no devuelve nada con un código inexistente ni para anon", async () => {
+    const guest = await newUser("Invitado");
+    const missing = await guest.client.rpc("get_invite_preview", { p_code: "ZZZZZZZZ" });
+    expect(missing.error).toBeNull();
+    expect(missing.data ?? []).toHaveLength(0);
+
+    const anonResult = await anon().rpc("get_invite_preview", { p_code: "ZZZZZZZZ" });
+    expect(anonResult.error).not.toBeNull();
+  });
+});
