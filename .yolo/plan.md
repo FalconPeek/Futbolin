@@ -705,8 +705,8 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: cards.spec.ts cubre que la carta es provisional con 2 calificaciones y muestra OVR con 3; tournament.spec.ts cubre una liga de 4 equipos (empezar, cargar resultados, tabla correcta, campeón) y una eliminación de 3 equipos (bye en la final, empate con penales, campeón); los bugs quedan como hallazgos con reproducción
 - tests: tests/e2e/cards.spec.ts, tests/e2e/tournament.spec.ts
 - gate: e2e
-- estado: en_curso
-- nota: haiku: dos test.fail eran carreras del test (no esperaba a que terminaran Guardar resultado ni Empezar torneo); reintento en Sonnet después de T51
+- estado: hecha
+- nota: encontró el 0-0 sin penales en eliminación; lo resuelve T52
 
 ### T46 — Revisión de seguridad
 - rol: security
@@ -769,6 +769,16 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - tests: supabase/tests/rls_tournaments.test.ts
 - gate: supabase/tests/rls_tournaments.test.ts
 - estado: hecha
+
+### T52 — En eliminación un 0-0 no muestra los penales
+- rol: frontend
+- etapa: fix
+- depende_de: T45
+- archivos: src/components/tournaments/tournament-result-form.tsx, src/components/tournaments/tournament-result-form.test.tsx, tests/e2e/tournament.spec.ts
+- criterio: en eliminación cualquier empate, incluido 0-0, muestra los campos de penales (isTie sin la condición > 0); tournament-result-form.test.tsx cubre el 0-0 y el test e2e 'eliminación: un 0-0 también pide penales' pasa sin test.fail
+- tests: src/components/tournaments/tournament-result-form.test.tsx, tests/e2e/tournament.spec.ts
+- gate: src/components/tournaments/tournament-result-form.test.tsx
+- estado: en_curso
 
 ## Riesgos
 - Muchos agentes en paralelo sobre un solo repo y una sola base local: el typecheck ve archivos a medio escribir de otra tarea, dos `npm install` o dos `next build` simultáneos se pisan y un `db reset` rompe los tests de otro. → Dependencias y componentes de shadcn se instalan en el Setup y ninguna tarea instala paquetes; las tareas de base comparten `supabase/migrations/` y por eso corren en fila; ningún test resetea la base; las tareas de UI usan gates por ruta y el build corre solo en T43 y en los e2e, que van en fila. Si un gate falla solo por archivos fuera del alcance de la tarea, el director lo re-corre al cerrar la tanda antes de subir de modelo.
