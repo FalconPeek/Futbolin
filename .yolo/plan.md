@@ -432,7 +432,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el proxy refresca la sesión con @supabase/ssr y manda a `/ingresar?next=<ruta>` a quien entra sin sesión a una ruta no pública, y redirect.ts exporta isPublicPath (/, /ingresar, /registrarme, /offline y archivos de PWA) y safeNextPath, que solo acepta rutas internas; redirect.test.ts verifica rutas públicas y que safeNextPath rechaza `//evil.com`, `https://evil.com`, `/\evil.com` y vacío (devuelve /grupos)
 - tests: src/lib/auth/redirect.test.ts
 - gate: src/lib/auth
-- estado: pendiente
+- estado: hecha
 
 ### T19 — Acciones de cuenta: registro, ingreso, salida y perfil
 - rol: backend
@@ -442,7 +442,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: signUp (guarda display_name en user metadata), signIn, signOut y updateProfile validan con zod, devuelven ActionResult con los mensajes de auth de Reglas de negocio y redirigen con safeNextPath; account.test.ts, con el cliente de Supabase mockeado, verifica datos inválidos, credenciales incorrectas, email repetido y el camino feliz de cada acción
 - tests: src/actions/account.test.ts
 - gate: src/actions/account.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T20 — Acciones de grupos
 - rol: backend
@@ -452,7 +452,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: createGroup, joinGroup, leaveGroup, removeMember y setMemberRole validan con zod, llaman a su RPC y devuelven ActionResult con mapDbError; groups.test.ts, con el cliente mockeado, verifica validación, el mapeo de INVALID_CODE y LAST_ADMIN y el camino feliz
 - tests: src/actions/groups.test.ts
 - gate: src/actions/groups.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T21 — Acciones de partidos
 - rol: backend
@@ -462,7 +462,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: createMatch, updateMatch, cancelMatch, setAttendance, assignTeams, finalizeMatch y voteMvp validan con zod, usan la tabla o la RPC que corresponde y devuelven ActionResult con mapDbError; matches.test.ts, con el cliente mockeado, verifica validación (asistencias de más, fecha pasada), el mapeo de MATCH_FULL y VOTING_CLOSED y el camino feliz
 - tests: src/actions/matches.test.ts
 - gate: src/actions/matches.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T22 — Acciones de calificaciones
 - rol: backend
@@ -472,7 +472,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: rateTeammate valida con zod, rechaza calificarse a uno mismo antes de llamar a la base y hace upsert en player_ratings por (group_id, rater_id, rated_id); ratings.test.ts, con el cliente mockeado, verifica validación, autocalificación y upsert
 - tests: src/actions/ratings.test.ts
 - gate: src/actions/ratings.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T23 — Acciones de torneos
 - rol: backend
@@ -482,7 +482,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: createTournament, renameTournament, addTeam, updateTeam, removeTeam, startTournament (mezcla los equipos, genera el fixture con roundRobin o bracket y llama a start_tournament) y reportTournamentResult validan con zod y devuelven ActionResult con mapDbError; tournaments.test.ts, con el cliente mockeado, verifica que startTournament manda el fixture correcto para liga y eliminación, el mapeo de PENALTIES_REQUIRED y NOT_ENOUGH_TEAMS y la validación de color
 - tests: src/actions/tournaments.test.ts
 - gate: src/actions/tournaments.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T24 — Ingreso, registro y portada
 - rol: frontend
