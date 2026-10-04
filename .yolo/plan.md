@@ -302,7 +302,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: `npm run db:types` genera database.types.ts con las 10 tablas y los enums, y client.ts (createBrowserClient) y server.ts (createServerClient con `await cookies()`) quedan tipados con `Database`; types.test.ts verifica con `Constants.public.Enums` que player_position tiene 15 valores e incluye 'POR' y que tournament_format incluye 'eliminacion'
 - tests: src/lib/supabase/types.test.ts
 - gate: src/lib/supabase
-- estado: pendiente
+- estado: hecha
 
 ### T6 — Componentes base: Button, Input, Badge y Card
 - rol: frontend

@@ -26,3 +26,5 @@ Una línea por decisión: qué, por qué.
 - Toaster de sonner con tema fijo "dark" y sin next-themes: el MVP tiene un solo tema.
 - vote_mvp y get_match_mvp_summary devuelven NOT_ALLOWED a quien no es miembro del grupo (NOT_ELIGIBLE queda para miembros que no jugaron); un partido inexistente y uno ajeno dan el mismo error para no revelar ids.
 - Las helpers y el trigger de core se revocan de anon y las políticas son `to authenticated` (corregido por el director sobre la entrega de T1 para cumplir el plan).
+- Server actions: reciben un objeto tipado (no FormData), validan con los esquemas de src/lib/validators, devuelven ActionResult y no llaman a redirect(); si hay que navegar devuelven `{ redirectTo }` en data y el cliente hace router.push + router.refresh. Así se testean con el cliente mockeado y los formularios usan useActionState o startTransition por igual.
+- report_tournament_result con penales `default null` para que los tipos generados los marquen opcionales (ajuste del director sobre T4 antes de las acciones).

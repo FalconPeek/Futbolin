@@ -194,8 +194,8 @@ create or replace function public.report_tournament_result(
   p_match_id uuid,
   p_home int,
   p_away int,
-  p_home_pens int,
-  p_away_pens int
+  p_home_pens int default null,
+  p_away_pens int default null
 )
 returns void
 language plpgsql
