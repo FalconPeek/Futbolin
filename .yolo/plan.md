@@ -787,4 +787,62 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - La lógica de la llave en plpgsql (T4) es la tarea más difícil del plan. → La regla de avance está escrita en Reglas de negocio con el mismo criterio que usa `nextSlot` de T13, y el test de T4 cubre el avance y el cierre del torneo; la escalera puede subirla a Opus.
 
 ## Auditoría
-_(la completa `plan.py audit`)_
+
+Corrida: 2026-10-04 10:41 -0400. Criterio: el gate de la tarea pasa y sus tests existen; lo que digan los agentes no cuenta.
+
+| Tarea | Gate | Tests | Resultado | Estado |
+|---|---|---|---|---|
+| T1 — Contrato núcleo: perfiles, grupos y membresías | supabase/tests/rls_core.test.ts: pasa | ok | verificada | hecha |
+| T2 — Contrato de partidos y MVP | supabase/tests/rls_matches.test.ts: pasa | ok | verificada | hecha |
+| T3 — Contrato de calificaciones y cartas | supabase/tests/rls_ratings.test.ts: pasa | ok | verificada | hecha |
+| T4 — Contrato de torneos | supabase/tests/rls_tournaments.test.ts: pasa | ok | verificada | hecha |
+| T5 — Tipos generados y clientes de Supabase | src/lib/supabase: pasa | ok | verificada | hecha |
+| T6 — Componentes base: Button, Input, Badge y Card | src/components/ui: pasa | ok | verificada | hecha |
+| T7 — PlayerCard y niveles de carta | src/components/picado/player-card.test.tsx: pasa | ok | verificada | hecha |
+| T8 — StandingsTable y FormBadge | src/components/picado/standings-table.test.tsx: pasa | ok | verificada | hecha |
+| T9 — Estructura de la app: encabezado, barra inferior y estados | src/components/layout: pasa | ok | verificada | hecha |
+| T10 — Reglas de cartas: posiciones, etiquetas y OVR | src/lib/cards: pasa | ok | verificada | hecha |
+| T11 — Armar equipos parejos | src/lib/matches: pasa | ok | verificada | hecha |
+| T12 — Tabla de jugadores del grupo | src/lib/standings/players.test.ts: pasa | ok | verificada | hecha |
+| T13 — Fixture de liga y llave de eliminación | src/lib/tournaments/fixtures.test.ts: pasa | ok | verificada | hecha |
+| T14 — Tabla de posiciones de torneo | src/lib/standings/teams.test.ts: pasa | ok | verificada | hecha |
+| T15 — Formato de fechas es-AR | src/lib/format: pasa | ok | verificada | hecha |
+| T16 — Resultado de acciones y mensajes de error | src/lib/result.test.ts: pasa | ok | verificada | hecha |
+| T17 — Validadores compartidos | src/lib/validators: pasa | ok | verificada | hecha |
+| T18 — Sesión y rutas protegidas | src/lib/auth: pasa | ok | verificada | hecha |
+| T19 — Acciones de cuenta: registro, ingreso, salida y perfil | src/actions/account.test.ts: pasa | ok | verificada | hecha |
+| T20 — Acciones de grupos | src/actions/groups.test.ts: pasa | ok | verificada | hecha |
+| T21 — Acciones de partidos | src/actions/matches.test.ts: pasa | ok | verificada | hecha |
+| T22 — Acciones de calificaciones | src/actions/ratings.test.ts: pasa | ok | verificada | hecha |
+| T23 — Acciones de torneos | src/actions/tournaments.test.ts: pasa | ok | verificada | hecha |
+| T24 — Ingreso, registro y portada | src/components/auth: pasa | ok | verificada | hecha |
+| T25 — Layout protegido y perfil | src/components/profile: pasa | ok | verificada | hecha |
+| T26 — Mis grupos: lista, crear y unirse | src/components/groups/groups.test.tsx: pasa | ok | verificada | hecha |
+| T27 — Layout del grupo y miembros | src/components/groups/members.test.tsx: pasa | ok | verificada | hecha |
+| T28 — Partidos: lista y creación | src/components/matches/match-list.test.tsx: pasa | ok | verificada | hecha |
+| T29 — Detalle del partido: asistencia, equipos y voto de MVP | src/components/matches/match-detail.test.tsx: pasa | ok | verificada | hecha |
+| T30 — Armar equipos | src/components/matches/team-picker.test.tsx: pasa | ok | verificada | hecha |
+| T31 — Cargar resultado del partido | src/components/matches/result-form.test.tsx: pasa | ok | verificada | hecha |
+| T32 — Galería de cartas y carta del jugador | src/lib/cards/build-card.test.ts: pasa | ok | verificada | hecha |
+| T33 — Calificar a un compañero | src/components/cards/rating-form.test.tsx: pasa | ok | verificada | hecha |
+| T34 — Ranking del grupo | src/components/ranking: pasa | ok | verificada | hecha |
+| T35 — Torneos: lista y creación | src/components/tournaments/tournament-list.test.tsx: pasa | ok | verificada | hecha |
+| T36 — Equipos del torneo e inicio | src/components/tournaments/team-editor.test.tsx: pasa | ok | verificada | hecha |
+| T37 — Llave de eliminación | src/components/tournaments/bracket.test.tsx: pasa | ok | verificada | hecha |
+| T38 — Vista del torneo: tabla, fixture y llave | src/components/tournaments/tournament-view.test.tsx: pasa | ok | verificada | hecha |
+| T39 — Cargar resultado de torneo | src/components/tournaments/tournament-result-form.test.tsx: pasa | ok | verificada | hecha |
+| T40 — Inicio del grupo | src/components/groups/group-home.test.tsx: pasa | ok | verificada | hecha |
+| T41 — PWA: manifest e íconos | src/app/manifest.test.ts: pasa | ok | verificada | hecha |
+| T42 — PWA: service worker y página sin conexión | src/components/pwa: pasa | ok | verificada | hecha |
+| T43 — Integración: build de producción y rutas completas | frontend: pasa | ok | verificada | hecha |
+| T44 — QA e2e: cuenta, grupo y partido | e2e: pasa | ok | verificada | hecha |
+| T45 — QA e2e: cartas y torneos | e2e: pasa | ok | verificada | hecha |
+| T46 — Revisión de seguridad | security: pasa | ok | verificada | hecha |
+| T47 — Revisión de código | review: pasa | ok | verificada | hecha |
+| T48 — Quitar any de las acciones de torneos | src/actions/tournaments.test.ts: pasa | ok | verificada | hecha |
+| T49 — Tamaños de texto y radios con tokens del design system | src/components: pasa | ok | verificada | hecha |
+| T50 — Lista de miembros vacía por un orden inválido | e2e: pasa | ok | verificada | hecha |
+| T51 — Cargas simultáneas de resultados no cierran el torneo | supabase/tests/rls_tournaments.test.ts: pasa | ok | verificada | hecha |
+| T52 — En eliminación un 0-0 no muestra los penales | src/components/tournaments/tournament-result-form.test.tsx: pasa | ok | verificada | hecha |
+
+Total: 52 hechas, 0 bloqueadas, 0 pendientes de 52.
