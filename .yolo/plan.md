@@ -684,7 +684,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: `npm run build` pasa sin errores y routes.test.ts verifica que existen las 24 páginas de Estructura de carpetas (incluida /offline); se corrigen solo los errores de integración que aparezcan, sin agregar funcionalidad
 - tests: src/app/routes.test.ts
 - gate: frontend
-- estado: pendiente
+- estado: hecha
 
 ### T44 — QA e2e: cuenta, grupo y partido
 - rol: qa
