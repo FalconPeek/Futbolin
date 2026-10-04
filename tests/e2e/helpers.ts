@@ -1,9 +1,12 @@
 import { config } from "dotenv";
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import crypto from "crypto";
-import { Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 import type { Database } from "@/lib/database.types";
 
+// Los e2e corren contra el Supabase local y nunca lo resetean: cada usuario lleva un email
+// único (uuid) y cada test arma sus propios grupos y partidos, así que pueden repetirse
+// sobre la misma base sin pisarse.
 config({ path: ".env.test.local", quiet: true });
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? "";
@@ -148,4 +151,45 @@ export async function confirmAttendance(
   if (error) {
     throw new Error(`Failed to confirm attendance: ${error.message}`);
   }
+}
+
+/**
+ * Votes for the MVP of a finalized match via the vote_mvp RPC, acting as the given user.
+ */
+export async function voteMvp(
+  user: TestUser,
+  matchId: string,
+  votedId: string
+): Promise<void> {
+  const { error } = await user.client.rpc("vote_mvp", {
+    p_match_id: matchId,
+    p_voted_id: votedId,
+  });
+
+  if (error) {
+    throw new Error(`Failed to vote MVP: ${error.message}`);
+  }
+}
+
+/**
+ * Reads the team assignment (A, B or null) of every player of a match, acting as the given user.
+ */
+export async function getTeamAssignments(
+  user: TestUser,
+  matchId: string
+): Promise<Record<string, "A" | "B" | null>> {
+  const { data, error } = await user.client
+    .from("match_players")
+    .select("user_id, team")
+    .eq("match_id", matchId);
+
+  if (error || !data) {
+    throw new Error(`Failed to read teams: ${error?.message}`);
+  }
+
+  const teams: Record<string, "A" | "B" | null> = {};
+  for (const row of data) {
+    teams[row.user_id] = row.team;
+  }
+  return teams;
 }

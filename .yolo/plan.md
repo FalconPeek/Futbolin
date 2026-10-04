@@ -694,8 +694,8 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: account-group.spec.ts cubre registrarse, crear grupo, copiar el link y que un segundo usuario se una; match.spec.ts cubre crear partido, confirmar con 4 usuarios, Armar parejo, cargar resultado con goles y votar MVP; helpers.ts crea usuarios con email único vía admin API y nunca resetea la base; los bugs encontrados quedan como hallazgos con el test que los reproduce
 - tests: tests/e2e/account-group.spec.ts, tests/e2e/match.spec.ts
 - gate: e2e
-- estado: en_curso
-- nota: haiku: el test de MVP era condicional (if isVisible) y no probaba el voto
+- estado: hecha
+- nota: encontró H1 (miembros vacíos), reproducido con test.fail; lo resuelve T50
 
 ### T45 — QA e2e: cartas y torneos
 - rol: qa
@@ -748,6 +748,16 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - tests: src/components/design-tokens.test.ts
 - gate: src/components
 - estado: hecha
+
+### T50 — Lista de miembros vacía por un orden inválido
+- rol: frontend
+- etapa: fix
+- depende_de: T44
+- archivos: src/app/(app)/g/[gid]/miembros/page.tsx, tests/e2e/account-group.spec.ts
+- criterio: la consulta de miembros deja de ordenar por profiles.display_name en PostgREST (ordena en TypeScript por nombre), maneja el error de la consulta con un estado de error en vez de una lista vacía, y el test e2e 'la lista de miembros muestra a todos los integrantes' pasa sin test.fail
+- tests: tests/e2e/account-group.spec.ts
+- gate: e2e
+- estado: en_curso
 
 ## Riesgos
 - Muchos agentes en paralelo sobre un solo repo y una sola base local: el typecheck ve archivos a medio escribir de otra tarea, dos `npm install` o dos `next build` simultáneos se pisan y un `db reset` rompe los tests de otro. → Dependencias y componentes de shadcn se instalan en el Setup y ninguna tarea instala paquetes; las tareas de base comparten `supabase/migrations/` y por eso corren en fila; ningún test resetea la base; las tareas de UI usan gates por ruta y el build corre solo en T43 y en los e2e, que van en fila. Si un gate falla solo por archivos fuera del alcance de la tarea, el director lo re-corre al cerrar la tanda antes de subir de modelo.

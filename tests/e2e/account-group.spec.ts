@@ -1,111 +1,126 @@
 import { test, expect } from "@playwright/test";
 import { createUser, login, createGroupWithMembers } from "./helpers";
 
-test.describe("Cuenta y Grupo (e2e)", () => {
-  test("registrarse → crear grupo → copiar link → unirse", async ({
+const GROUP_URL = /\/g\/([0-9a-f-]{36})$/;
+
+test.describe("Cuenta y grupo (e2e)", () => {
+  test("registrarse, crear grupo, copiar el link y que un segundo usuario se una", async ({
     page,
     context,
+    browser,
   }) => {
-    // Step 1: Register a new user
-    const newEmail = `e2e-${Date.now()}-${Math.random().toString(36).substring(7)}@picado.test`;
-    const newPassword = "SecurePass123";
-    const displayName = "Registrador Test";
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
 
+    const ownerName = "Registrador Test";
+    const email = `e2e-${crypto.randomUUID()}@picado.test`;
+
+    // Registrarse desde la pantalla
     await page.goto("/registrarme");
     await page.waitForLoadState("networkidle");
-    await page.getByLabel("Tu nombre").fill(displayName);
-    await page.getByLabel("Email").fill(newEmail);
-    await page.getByLabel("Contraseña").fill(newPassword);
+    await page.getByLabel("Tu nombre").fill(ownerName);
+    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Contraseña").fill("SecurePass123");
     await page.getByRole("button", { name: "Crear cuenta" }).click();
 
-    // Should land in /grupos after signup
-    await page.waitForURL("/grupos", { timeout: 10000 });
-    expect(page.url()).toContain("/grupos");
+    await expect(page).toHaveURL(/\/grupos$/);
+    await expect(page.getByText("Todavía no estás en ningún grupo")).toBeVisible();
 
-    // Step 2: Should see empty state
-    const emptyMessage = page.getByText("Todavía no estás en ningún grupo");
-    await expect(emptyMessage).toBeVisible();
-
-    // Step 3: Create a group
-    const createLink = page.getByRole("link", { name: "Crear grupo" }).first();
-    await expect(createLink).toBeVisible();
-    await createLink.click();
-
-    // Should be in /grupos/nuevo
-    await page.waitForURL(/\/grupos\/nuevo/, { timeout: 10000 });
-
-    // Fill group creation form
+    // Crear el grupo
+    await page.getByRole("link", { name: "Crear grupo" }).first().click();
+    await expect(page).toHaveURL(/\/grupos\/nuevo$/);
+    await page.waitForLoadState("networkidle");
     await page.getByLabel("Nombre del grupo").fill("Grupo e2e");
-    const submitButton = page.getByRole("button", { name: "Crear grupo" });
-    await submitButton.click();
+    await page.getByRole("button", { name: "Crear grupo" }).click();
 
-    // Should be redirected to /g/<gid>
-    await page.waitForURL(/\/g\/[a-f0-9-]+/, { timeout: 10000 });
-    const groupUrl = page.url();
-    const groupIdMatch = groupUrl.match(/\/g\/([a-f0-9-]+)/);
-    const groupId = groupIdMatch?.[1];
+    await expect(page).toHaveURL(GROUP_URL);
+    const groupId = page.url().match(GROUP_URL)?.[1];
     expect(groupId).toBeTruthy();
+    await expect(page.getByRole("heading", { name: "Grupo e2e" })).toBeVisible();
 
-    // Step 4: Navigate to members page and get invite code
-    await page.goto(`/g/${groupId}/miembros`, { waitUntil: "networkidle" });
+    // Ir a Miembros desde la home del grupo y ver el código de invitación
+    await page.getByRole("link", { name: "Miembros" }).click();
+    await expect(page).toHaveURL(/\/miembros$/);
+    await expect(page.getByText("Invitá a tus amigos")).toBeVisible();
+    await expect(page.getByText("Código", { exact: true })).toBeVisible();
+    const codeText = page.getByText(/^[A-Z0-9]{8}$/);
+    await expect(codeText).toBeVisible();
+    const inviteCode = (await codeText.textContent())?.trim() ?? "";
+    expect(inviteCode).toMatch(/^[A-HJ-NP-Z2-9]{8}$/);
 
-    // Check for invitation code section
-    const inviteSection = page.getByText("Código");
-    await expect(inviteSection).toBeVisible();
+    // Copiar el link: el portapapeles tiene que quedar con <origin>/unirse/<CODE>
+    const origin = new URL(page.url()).origin;
+    await page.waitForLoadState("networkidle");
+    await page.getByRole("button", { name: "Copiar link" }).click();
+    await expect(page.getByText("Copiamos el link.")).toBeVisible();
 
-    // Extract the invite code from the display
-    const codeDisplay = page.locator("p.text-score").first();
-    const inviteCode = (await codeDisplay.textContent())?.trim();
-    expect(inviteCode).toMatch(/^[A-Z0-9]{8}$/i);
+    const copiedLink = await page.evaluate(() => navigator.clipboard.readText());
+    expect(copiedLink).toBe(`${origin}/unirse/${inviteCode}`);
 
-    // Step 5: Second user joins via /unirse/<code>
-    const secondUser = await createUser("Second User");
-    const newPageContext = await context.browser()!.newContext();
-    const secondPage = await newPageContext.newPage();
+    // Segundo usuario: entra con el link copiado
+    const second = await createUser("Segundo Jugador");
+    const secondContext = await browser.newContext();
+    try {
+      const secondPage = await secondContext.newPage();
+      await login(secondPage, second);
 
-    // Login second user
-    await login(secondPage, secondUser);
+      await secondPage.goto(copiedLink);
+      await expect(secondPage.getByText("Te invitaron a")).toBeVisible();
+      await expect(secondPage.getByRole("heading", { name: "Grupo e2e" })).toBeVisible();
+      await expect(secondPage.getByText("1 miembro", { exact: true })).toBeVisible();
 
-    // Navigate to /unirse/<code>
-    await secondPage.goto(`/unirse/${inviteCode}`, { waitUntil: "networkidle" });
+      await secondPage.waitForLoadState("networkidle");
+      await secondPage.getByRole("button", { name: "Unite al grupo" }).click();
+      await expect(secondPage).toHaveURL(`/g/${groupId}`);
+      await expect(secondPage.getByRole("heading", { name: "Grupo e2e" })).toBeVisible();
 
-    // Should see group name
-    const groupNamePreview = secondPage.getByText("Grupo e2e");
-    await expect(groupNamePreview).toBeVisible();
+      // Con el link ya usado, el segundo usuario ya es miembro y se lo manda directo al grupo
+      await secondPage.goto(copiedLink);
+      await expect(secondPage).toHaveURL(`/g/${groupId}`);
+    } finally {
+      await secondContext.close();
+    }
 
-    // Should see join button
-    const joinButton = secondPage.getByRole("button", { name: "Unite al grupo" });
-    await expect(joinButton).toBeVisible();
-
-    // Click to join
-    await joinButton.click();
-
-    // Should be redirected to /g/<gid>
-    await secondPage.waitForURL(`/g/${groupId}`, { timeout: 10000 });
-
-    // Cleanup
-    await newPageContext.close();
+    // El dueño ve el grupo con 2 miembros en su lista de grupos
+    await page.goto("/grupos");
+    await expect(page.getByText("Grupo e2e")).toBeVisible();
+    await expect(page.getByText("2 miembros", { exact: true })).toBeVisible();
   });
 
-  test("usuario sin sesión en /g/<gid> es redirigido a /ingresar", async ({
-    page,
-    context,
-  }) => {
-    // Create a test group with an owner
+  // HALLAZGO H1 (ver el reporte de T44): /g/<gid>/miembros ordena con
+  // .order("profiles.display_name"), PostgREST responde PGRST100 y la página ignora el error:
+  // la lista de miembros sale vacía. Cuando se arregle (order con referencedTable: "profiles"),
+  // este test pasa a verde y Playwright lo marca como fallo: sacá la línea test.fail().
+  test("la lista de miembros muestra a todos los integrantes", async ({ page }) => {
+    test.fail(true, "H1: la página de miembros no lista a nadie (PGRST100 al ordenar)");
+
+    const owner = await createUser("Dueña Del Grupo");
+    const member = await createUser("Miembro Nuevo");
+    const { groupId } = await createGroupWithMembers(owner, [member], "Grupo con miembros");
+
+    await login(page, owner);
+    await page.goto(`/g/${groupId}/miembros`);
+
+    await expect(page.getByText("Dueña Del Grupo", { exact: true })).toBeVisible();
+    await expect(page.getByText("Miembro Nuevo", { exact: true })).toBeVisible();
+    await expect(page.getByText("(vos)")).toBeVisible();
+  });
+
+  test("un link de invitación inválido avisa que no sirve", async ({ page }) => {
+    const user = await createUser("Invitado Perdido");
+    await login(page, user);
+
+    await page.goto("/unirse/ZZZZZZZZ");
+    await expect(page.getByRole("heading", { name: "Este link no sirve" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Unite al grupo" })).toHaveCount(0);
+  });
+
+  test("usuario sin sesión en /g/<gid> es redirigido a /ingresar", async ({ page }) => {
     const owner = await createUser("Owner User");
     const { groupId } = await createGroupWithMembers(owner, [], "Test Group");
 
-    // Create a new browser context without authentication
-    const unauthPage = await context.browser()!.newPage();
+    await page.goto(`/g/${groupId}`);
 
-    // Try to access the group page without authentication
-    await unauthPage.goto(`/g/${groupId}`);
-
-    // Should be redirected to /ingresar with ?next parameter
-    await unauthPage.waitForURL(/\/ingresar\?next=/, { timeout: 10000 });
-    expect(unauthPage.url()).toContain("/ingresar");
-    expect(unauthPage.url()).toContain("?next=");
-
-    await unauthPage.close();
+    await expect(page).toHaveURL(/\/ingresar\?next=/);
+    await expect(page.getByRole("button", { name: "Ingresá" })).toBeVisible();
   });
 });
