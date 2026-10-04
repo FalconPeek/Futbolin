@@ -262,7 +262,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: `20261004000100_core.sql` crea enums, profiles con trigger handle_new_user, groups, group_members, los helpers y las RPC de grupos como dicen Modelo de datos y Reglas de negocio, y aplica limpio con `npm run db:reset`; rls_core.test.ts prueba que un usuario no ve grupos ni perfiles de otro grupo, que anon no lee nada, que join_group con código válido une y con inválido da INVALID_CODE, que insertar en group_members directo falla y que el único admin no puede salir (LAST_ADMIN)
 - tests: supabase/tests/rls_core.test.ts
 - gate: supabase/tests/rls_core.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T2 — Contrato de partidos y MVP
 - rol: backend
@@ -312,7 +312,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: los cuatro componentes de shadcn quedan ajustados a sus README e index.d.ts (Button con variantes primary/secondary/ghost/destructive, tamaños sm 36/md 44/lg 52 y block; Input con label, hint y error accesible vía aria-describedby y aria-invalid; Badge con neutral/primary/gold/info/destructive, gold e info delineadas; Card con title, subtitle, action y rounded-lg), usando solo tokens, y base.test.tsx verifica variantes, tamaños y el error del Input
 - tests: src/components/ui/base.test.tsx
 - gate: src/components/ui
-- estado: pendiente
+- estado: hecha
 
 ### T7 — PlayerCard y niveles de carta
 - rol: frontend
@@ -322,7 +322,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: PlayerCard sigue su README, `PlayerCardProps` de `src/components/picado/types.ts` y las medidas de `referencia/bundle.css` (tamaños md 200 y sm 148, iniciales sin foto, máximo 3 PlayStyles, etiquetas de arquero con `goalkeeper`, nota "Provisional · faltan votos" y OVR "–" si es provisional, aria-label con nombre, posición, OVR y nivel), y `tierFor` en tier.ts aplica la regla de niveles; player-card.test.tsx cubre los cinco niveles, el modo provisional y las etiquetas de arquero
 - tests: src/components/picado/player-card.test.tsx
 - gate: src/components/picado/player-card.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T8 — StandingsTable y FormBadge
 - rol: frontend
@@ -332,7 +332,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: StandingsTable y FormBadge siguen sus README y `src/components/picado/types.ts` (DG calculada, Pts en negrita, números tabulares, columna de nombre fija con scroll horizontal, línea de corte y posiciones en primary según `qualify`, Buchholz solo si viene, hasta 5 FormBadge con G relleno, E apagado y P delineado); standings-table.test.tsx verifica DG, la marca de clasificados, la columna Buchholz condicional y las letras de forma
 - tests: src/components/picado/standings-table.test.tsx
 - gate: src/components/picado/standings-table.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T9 — Estructura de la app: encabezado, barra inferior y estados
 - rol: frontend
@@ -342,7 +342,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: existen AppHeader (título, volver opcional, slot derecho), BottomNav del grupo (Inicio, Partidos, Torneos, Ranking, Cartas con íconos lucide, activo en primary según la ruta, alto h-nav más safe-area), EmptyState, ErrorState y PageSkeleton, y el layout raíz monta el Toaster de sonner; layout.test.tsx verifica los cinco links de BottomNav con el gid, el estado activo y que EmptyState muestra su acción
 - tests: src/components/layout/layout.test.tsx
 - gate: src/components/layout
-- estado: pendiente
+- estado: hecha
 
 ### T10 — Reglas de cartas: posiciones, etiquetas y OVR
 - rol: backend
@@ -352,7 +352,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: positions.ts exporta POSITIONS (las 15), positionGroup y STAT_LABELS por kind, y ovr.ts exporta computeOvr(position, stats) con los pesos de Reglas de negocio; ovr.test.ts verifica que los pesos de cada grupo suman 1, un caso calculado a mano por grupo y el acotado a 1–99
 - tests: src/lib/cards/ovr.test.ts
 - gate: src/lib/cards
-- estado: pendiente
+- estado: hecha
 
 ### T11 — Armar equipos parejos
 - rol: backend
@@ -362,7 +362,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: balanceTeams aplica la regla de Armar parejo; balance.test.ts verifica tamaños con diferencia ≤ 1, arqueros separados, OVR null como 60, resultado determinista y una diferencia de suma ≤ 10 en un caso de 10 jugadores dado
 - tests: src/lib/matches/balance.test.ts
 - gate: src/lib/matches
-- estado: pendiente
+- estado: hecha
 
 ### T12 — Tabla de jugadores del grupo
 - rol: backend
@@ -372,7 +372,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: computePlayerStandings aplica la regla de Tabla de jugadores y devuelve filas compatibles con `StandingsRow` más goals, assists y mvps; players.test.ts verifica puntos, GF/GC, la forma con el más reciente al final, el orden por desempates y que ignora partidos no finalizados
 - tests: src/lib/standings/players.test.ts
 - gate: src/lib/standings/players.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T13 — Fixture de liga y llave de eliminación
 - rol: backend
@@ -382,7 +382,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: roundRobin, bracket, nextSlot y roundLabel cumplen Fixture y llave; fixtures.test.ts verifica que en liga cada par juega una vez por vuelta y nadie juega dos veces por ronda (4 y 5 equipos, ida y vuelta), que la llave de 3 y 5 equipos ubica los byes en la ronda 2 del lado correcto, que nextSlot respeta la paridad y los nombres "Final", "Semifinal" y "Cuartos de final"
 - tests: src/lib/tournaments/fixtures.test.ts
 - gate: src/lib/tournaments/fixtures.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T14 — Tabla de posiciones de torneo
 - rol: backend
@@ -392,7 +392,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: computeTeamStandings y tournamentChampion aplican la regla de tabla y campeón de torneo con filas `StandingsRow` (con color); teams.test.ts verifica puntos, que los penales no suman, el orden por desempates, la forma y el campeón de liga y de eliminación por penales
 - tests: src/lib/standings/teams.test.ts
 - gate: src/lib/standings/teams.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T15 — Formato de fechas es-AR
 - rol: backend
@@ -402,7 +402,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: formatMatchDate devuelve "sáb 3 oct · 21:00" (día y mes abreviados, sin puntos, en minúscula) en hora de Buenos Aires y formatShortDate devuelve "3 oct"; date.test.ts verifica que `2026-10-04T00:00:00Z` da "sáb 3 oct · 21:00" y un caso de cambio de mes
 - tests: src/lib/format/date.test.ts
 - gate: src/lib/format
-- estado: pendiente
+- estado: hecha
 
 ### T16 — Resultado de acciones y mensajes de error
 - rol: backend
@@ -412,7 +412,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: result.ts exporta `ActionResult<T>`, `ok()`, `fail()` y `mapDbError(error)` que traduce cada código de Reglas de negocio a su mensaje y cualquier otro error al genérico; result.test.ts verifica todos los códigos, un error desconocido y que nunca devuelve el texto original de Postgres
 - tests: src/lib/result.test.ts
 - gate: src/lib/result.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T17 — Validadores compartidos
 - rol: backend

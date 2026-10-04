@@ -19,3 +19,8 @@ Una línea por decisión: qué, por qué.
 - Etapa `contrato` = todo lo que consumen otras tareas: base, tipos, componentes del sistema, reglas puras y validadores. Así corren en paralelo con la base en la primera oleada.
 - Gates por ruta o archivo en las tareas de UI y de lógica para no correr `next build` en paralelo; el build va en T43 y en los e2e.
 - Tema oscuro único en el MVP; los tokens del claro quedan en globals.css para después.
+- shadcn inicializado con base Radix y preset nova (estilo radix-nova): es la variante que más conocen los agentes; el init apuntó por error a design-system/globals.css, se restauró y components.json usa src/app/globals.css.
+- `cn` del paquete oficial `cn` (shadcn-ui) configurado en src/lib/utils.ts con los tokens propios (text-body, rounded-card, shadow-card, h-tap, pb-nav) y todos los componentes de ui lo importan de ahí, para que el merge de clases no pise tamaños de texto con colores.
+- Sin @vitejs/plugin-react: choca por peer deps de Babel 8 con shadcn y Vitest compila JSX solo con `"jsx": "react-jsx"` del tsconfig.
+- @types/node 24 (Node 24 LTS instalado) porque Vitest 5 pide ≥ 22.
+- Toaster de sonner con tema fijo "dark" y sin next-themes: el MVP tiene un solo tema.
