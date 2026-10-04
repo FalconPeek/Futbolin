@@ -282,7 +282,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: `20261004000300_ratings.sql` crea player_ratings, rating_kind_for y get_group_cards; rls_ratings.test.ts prueba que nadie se califica a sí mismo ni califica a alguien de otro grupo, que el kind tiene que coincidir con la posición del calificado, que un usuario solo lee sus propias calificaciones y que get_group_cards devuelve stats null con menos de 3 calificadores y el promedio redondeado con 3
 - tests: supabase/tests/rls_ratings.test.ts
 - gate: supabase/tests/rls_ratings.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T4 — Contrato de torneos
 - rol: backend
@@ -672,7 +672,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: public/sw.js precachea /offline, usa red primero en navegaciones y responde /offline sin conexión (sin cachear respuestas de Supabase ni de /api), SwRegister registra /sw.js solo en producción y si el navegador lo soporta, el layout raíz lo monta y /offline dice "Estás sin conexión" con "Reintentar"; sw-register.test.tsx verifica que registra en producción, no registra en desarrollo ni sin soporte
 - tests: src/components/pwa/sw-register.test.tsx
 - gate: src/components/pwa
-- estado: pendiente
+- estado: hecha
 
 ### T43 — Integración: build de producción y rutas completas
 - rol: frontend

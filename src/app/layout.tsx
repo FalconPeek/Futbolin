@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Barlow, Barlow_Condensed } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { SwRegister } from "@/components/pwa/sw-register";
 import "./globals.css";
 
 const barlow = Barlow({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-barlow" });
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <Toaster />
+        <SwRegister />
       </body>
     </html>
   );
