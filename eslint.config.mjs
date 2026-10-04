@@ -18,6 +18,13 @@ const eslintConfig = defineConfig([
     "playwright-report/**",
     "test-results/**",
   ]),
+  // Solo aplica al Pages Router y su plugin arma una regex inválida con rutas
+  // dinámicas que tienen loading.tsx (src/app/(app)/g/[gid]/…), lo que rompe todo el lint.
+  {
+    rules: {
+      "@next/next/no-html-link-for-pages": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

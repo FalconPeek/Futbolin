@@ -533,7 +533,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: /partidos lista próximos y jugados con MatchCard (fecha con formatMatchDate, lugar, confirmados/cupo en tabular, resultado en font-display y Badge Programado info / Finalizado neutral / Cancelado destructive) y estado vacío con "Crear partido", y /partidos/nuevo crea con MatchForm; match-list.test.tsx verifica el contenido de MatchCard por estado y los errores de MatchForm
 - tests: src/components/matches/match-list.test.tsx
 - gate: src/components/matches/match-list.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T29 — Detalle del partido: asistencia, equipos y voto de MVP
 - rol: frontend
@@ -573,7 +573,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: buildCard convierte una fila de get_group_cards y el flag de MVP en PlayerCardProps (nombre por apodo, etiquetas por kind, OVR con computeOvr, provisional con menos de 3 calificadores), /cartas muestra la galería en grilla de 2 columnas con PlayerCard sm ordenada por OVR, y /cartas/[uid] muestra la carta md, "12 votos" y "Calificá a <nombre>" si no es uno mismo; build-card.test.ts verifica campo, arquero, provisional y MVP
 - tests: src/lib/cards/build-card.test.ts
 - gate: src/lib/cards/build-card.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T33 — Calificar a un compañero
 - rol: frontend
@@ -593,7 +593,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: /ranking muestra la tabla de jugadores con StandingsTable (teamLabel "Jugador") a partir de computePlayerStandings y debajo listas de goleadores, asistidores y MVPs (top 5, números tabulares), con estado vacío "Todavía no hay partidos jugados"; ranking.test.tsx verifica el orden de las listas y el estado vacío
 - tests: src/components/ranking/ranking.test.tsx
 - gate: src/components/ranking
-- estado: pendiente
+- estado: hecha
 
 ### T35 — Torneos: lista y creación
 - rol: frontend
@@ -603,7 +603,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: /torneos lista torneos con TournamentCard (nombre, formato, cantidad de equipos, Badge Borrador neutral / En curso primary / Finalizado neutral y campeón con Badge gold) y estado vacío con "Crear torneo", y /torneos/nuevo crea con nombre, formato y vuelta (solo liga) y lleva a la carga de equipos; tournament-list.test.tsx verifica TournamentCard por estado y que el campo de ida y vuelta solo aparece en liga
 - tests: src/components/tournaments/tournament-list.test.tsx
 - gate: src/components/tournaments/tournament-list.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T36 — Equipos del torneo e inicio
 - rol: frontend

@@ -30,3 +30,5 @@ Una línea por decisión: qué, por qué.
 - report_tournament_result con penales `default null` para que los tipos generados los marquen opcionales (ajuste del director sobre T4 antes de las acciones).
 - RPC get_invite_preview (security definer, solo con el código) para que /unirse muestre el nombre del grupo antes de unirse sin abrir la RLS de groups.
 - El layout del grupo monta solo la barra inferior; cada pantalla trae su AppHeader (el detalle de un partido necesita su propio "volver").
+- Regla @next/next/no-html-link-for-pages desactivada: es del Pages Router y su plugin arma una regex inválida con rutas dinámicas que tienen loading.tsx, lo que rompía todo el lint.
+- Dos agentes crearon rutas en carpetas con barras invertidas literales (`\(app\)`, `\[gid\]`) por escapar paréntesis y corchetes en la terminal; el director las movió a (app)/g/[gid] y los prompts de frontend ahora piden citar las rutas sin escapar. T43 (routes.test.ts) sirve de red para esto.
