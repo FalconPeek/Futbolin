@@ -233,11 +233,12 @@ begin
     raise exception 'INVALID_INPUT';
   end if;
 
-  -- Get tournament details and check permission
+  -- Get tournament details and check permission (lock row for concurrent updates)
   select format, status
   into v_tournament_format, v_tournament_status
   from public.tournaments
-  where id = v_tournament_id;
+  where id = v_tournament_id
+  for update;
 
   if not public.is_tournament_organizer(v_tournament_id) then
     raise exception 'NOT_ALLOWED';

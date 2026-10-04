@@ -295,6 +295,43 @@ describe('Tournaments', () => {
       expect(tournament!.status).toBe('finalizado');
     });
 
+    it('league: concurrent final results finalize tournament (serialized by FOR UPDATE)', async () => {
+      // Test this 3 times to ensure reliability
+      for (let attempt = 0; attempt < 3; attempt++) {
+        const { users, groupId } = await makeGroup(1);
+        const tournamentId = await createTournament(users[0], groupId, `League Concurrent ${attempt + 1}`, 'liga');
+
+        const teamA = await addTeam(users[0], tournamentId, 'Equipo A', '#2fd27a');
+        const teamB = await addTeam(users[0], tournamentId, 'Equipo B', '#ff0000');
+        const teamC = await addTeam(users[0], tournamentId, 'Equipo C', '#0000ff');
+
+        const fixtures: Fixture[] = [
+          { round: 1, slot: 0, home_team_id: teamA, away_team_id: teamB },
+          { round: 2, slot: 0, home_team_id: teamB, away_team_id: teamC },
+          { round: 3, slot: 0, home_team_id: teamC, away_team_id: teamA },
+        ];
+
+        await ok(startTournament(users[0], tournamentId, fixtures));
+
+        const matches = await getMatches(users[0], tournamentId);
+        expect(matches).toHaveLength(3);
+
+        // Report first result normally
+        await ok(reportResult(users[0], matches[0]!.id, 1, 0, null, null));
+
+        // Load final two results in parallel (concurrent)
+        const result1 = reportResult(users[0], matches[1]!.id, 2, 1, null, null);
+        const result2 = reportResult(users[0], matches[2]!.id, 3, 0, null, null);
+
+        await Promise.all([ok(result1), ok(result2)]);
+
+        // Tournament must be finalized (not left in 'en_curso')
+        const tournament = await getTournament(users[0], tournamentId);
+        expect(tournament).not.toBeNull();
+        expect(tournament!.status).toBe('finalizado');
+      }
+    });
+
     it('elimination: 4 teams, penalties required on draw, winner advances to correct slot', async () => {
       const { users, groupId } = await makeGroup(1);
       const tournamentId = await createTournament(users[0], groupId, 'Elim', 'eliminacion');

@@ -705,7 +705,8 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: cards.spec.ts cubre que la carta es provisional con 2 calificaciones y muestra OVR con 3; tournament.spec.ts cubre una liga de 4 equipos (empezar, cargar resultados, tabla correcta, campeón) y una eliminación de 3 equipos (bye en la final, empate con penales, campeón); los bugs quedan como hallazgos con reproducción
 - tests: tests/e2e/cards.spec.ts, tests/e2e/tournament.spec.ts
 - gate: e2e
-- estado: pendiente
+- estado: en_curso
+- nota: haiku: dos test.fail eran carreras del test (no esperaba a que terminaran Guardar resultado ni Empezar torneo); reintento en Sonnet después de T51
 
 ### T46 — Revisión de seguridad
 - rol: security
@@ -757,6 +758,16 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: la consulta de miembros deja de ordenar por profiles.display_name en PostgREST (ordena en TypeScript por nombre), maneja el error de la consulta con un estado de error en vez de una lista vacía, y el test e2e 'la lista de miembros muestra a todos los integrantes' pasa sin test.fail
 - tests: tests/e2e/account-group.spec.ts
 - gate: e2e
+- estado: hecha
+
+### T51 — Cargas simultáneas de resultados no cierran el torneo
+- rol: backend
+- etapa: fix
+- depende_de: T45
+- archivos: supabase/migrations/20261004000400_tournaments.sql, supabase/tests/rls_tournaments.test.ts
+- criterio: report_tournament_result bloquea la fila del torneo con select … for update antes de actualizar el partido, de modo que dos resultados cargados a la vez para los últimos partidos dejan el torneo en 'finalizado'; rls_tournaments.test.ts lo prueba cargando en paralelo (Promise.all) los dos últimos resultados de una liga
+- tests: supabase/tests/rls_tournaments.test.ts
+- gate: supabase/tests/rls_tournaments.test.ts
 - estado: hecha
 
 ## Riesgos
