@@ -292,7 +292,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: `20261004000400_tournaments.sql` crea tournaments, tournament_teams (con límite de 16), tournament_matches, sus helpers y las RPC start_tournament y report_tournament_result; rls_tournaments.test.ts prueba que un no miembro no ve torneos, que un miembro no organizador no puede iniciar ni cargar resultados, que no se agregan equipos con el torneo en curso, que un empate en eliminación sin penales da PENALTIES_REQUIRED, que el ganador avanza al slot correcto de la ronda siguiente y que el torneo queda 'finalizado' al jugarse la final
 - tests: supabase/tests/rls_tournaments.test.ts
 - gate: supabase/tests/rls_tournaments.test.ts
-- estado: pendiente
+- estado: hecha
 
 ### T5 — Tipos generados y clientes de Supabase
 - rol: backend
