@@ -1,6 +1,8 @@
 # Picado
 
-PWA mobile-first para organizar fútbol real entre amigos (partidos, torneos, cartas estilo FC votadas por los compañeros, rankings, plantillas). Stack previsto: Next.js 16 (App Router), React 19, TypeScript, Tailwind 4 + shadcn/ui, Supabase.
+PWA mobile-first para organizar fútbol real entre amigos (partidos, torneos, cartas estilo FC votadas por los compañeros, rankings, plantillas). Stack: Next.js 16 (App Router, `src/`), React 19, TypeScript, Tailwind 4 + shadcn/ui (Radix), Supabase.
+
+Next.js 16 cambia APIs respecto de versiones anteriores: leé @AGENTS.md antes de escribir código.
 
 ## Design system — obligatorio para cualquier UI
 
@@ -10,7 +12,7 @@ Todo vive en `design-system/`:
 |---|---|
 | `design-system/README.md` | Guía de marca: tono, color, tipografía, espaciado, estados, layout. **Leela antes de crear o cambiar UI.** |
 | `design-system/tokens.json` | Fuente de verdad de los tokens (colores por tema, tipografía, espaciado, radios, sombras). |
-| `design-system/globals.css` | Los tokens listos para Tailwind 4 + shadcn/ui. Se copia a `app/globals.css`. |
+| `design-system/globals.css` | Los tokens listos para Tailwind 4 + shadcn/ui. Se copia a `src/app/globals.css`. |
 | `design-system/components/<Nombre>/README.md` | Guía de cada componente (cuándo usarlo, props, reglas). |
 | `design-system/components/index.d.ts` | Props de cada componente. |
 | `design-system/referencia/bundle.css`, `bundle.js` | Implementación de referencia de los componentes (CSS + React sin JSX). Solo para copiar medidas y estructura: **no importarlos en la app**. |
@@ -26,13 +28,13 @@ Todo vive en `design-system/`:
 - Colores de nivel de carta (`bg-tier-bronze`, `tier-silver`, `tier-gold`, `tier-special`, `tier-provisional` y sus `-ink`): solo dentro de `PlayerCard`.
 - Textos en español rioplatense con voseo y en sentence case ("Reportar resultado", "Votá"). Sin emoji. Íconos: lucide-react, 20px.
 - Componentes del sistema (`Button`, `Input`, `Badge`, `Card`, `FormBadge`, `PlayerCard`, `StandingsTable`): los base salen de shadcn/ui ajustados a estas reglas; `FormBadge`, `PlayerCard` y `StandingsTable` se construyen siguiendo su README, `index.d.ts` y `referencia/bundle.css`.
-- Si cambiás un token, cambialo en `design-system/tokens.json` y en `app/globals.css` a la vez.
+- Si cambiás un token, cambialo en `design-system/tokens.json` y en `src/app/globals.css` a la vez.
 
 ### Arranque del proyecto
 
 1. `create-next-app` no acepta una carpeta con archivos: generá la app en una carpeta temporal (Tailwind, TypeScript, App Router) y mové su contenido a la raíz sin pisar `CLAUDE.md` ni `design-system/`.
-2. `npx shadcn@latest init` y después reemplazá `app/globals.css` por `design-system/globals.css`. Si el init agregó otros `@import` (por ejemplo `tw-animate-css`), conservalos debajo de `@import "tailwindcss";`.
-3. Fuentes en `app/layout.tsx`:
+2. `npx shadcn@latest init` y después reemplazá `src/app/globals.css` por `design-system/globals.css`. Si el init agregó otros `@import` (por ejemplo `tw-animate-css`), conservalos debajo de `@import "tailwindcss";`.
+3. Fuentes en `src/app/layout.tsx`:
 
 ```tsx
 import { Barlow, Barlow_Condensed } from "next/font/google";

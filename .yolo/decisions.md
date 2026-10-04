@@ -1,0 +1,21 @@
+# Decisiones
+
+Una línea por decisión: qué, por qué.
+
+- Herramientas (Node 24.21 LTS, npm 11, gh 2.102, supabase 2.119, vercel 62.2) instaladas en `~/.local` con checksum verificado y PATH en `~/.zshenv` y `~/.bashrc`: no hay sudo sin contraseña y el usuario pidió instalar todo.
+- Docker lo instala el usuario; si la sesión no tiene el grupo docker activo, los comandos de supabase van con `sg docker -c`: así no hace falta reiniciar la sesión.
+- Supabase de producción: proyecto nuevo "picado" en la org "FalconPeek dev", creado recién en el gate de producción con OK; el único proyecto que existe (AgroNexo) es otra app.
+- Vercel: cuenta personal (sin equipos); el proyecto se crea en el gate de producción.
+- Auth con email y contraseña sin confirmación de email (local y prod): el SMTP por defecto de Supabase solo manda a miembros del equipo; recuperar contraseña queda fuera del MVP.
+- Estructura con `src/` (default de yolo-session); `globals.css` y `layout.tsx` viven en `src/app/` y CLAUDE.md se ajusta en el setup.
+- Rutas en español y agrupadas por grupo: `/g/[gid]/partidos`, `/g/[gid]/torneos/[tid]`, etc., porque todo pasa dentro de un grupo.
+- Las mutaciones de membresías, asistencia, equipos, resultados, votos y fixtures van por RPC security definer con códigos de error; esas tablas no tienen políticas de escritura. Así cada regla de negocio se verifica en la base y se prueba con un test de RLS.
+- Grants por columna en matches, groups, profiles, tournaments y tournament_teams para que un update directo no saltee las RPC.
+- Resultados de picados los carga el organizador (creador del partido o admin del grupo); sin doble reporte ni disputas.
+- MVP: votan los que jugaron, 72 h, un voto final, anónimo; empate = todos los empatados son MVP. Los totales solo se ven al cerrar.
+- Cartas por grupo (cada grupo califica distinto); valores 1–99; stats y OVR ocultos con menos de 3 calificadores para que nadie deduzca un voto individual.
+- OVR con pesos fijos por grupo de posición (arquero, defensa, medio, ataque), escritos en Reglas de negocio.
+- Torneos: participantes = equipos con nombre y color, sin plantel; liga (ida o ida y vuelta) y eliminación directa de 2 a 16 equipos con byes y penales; sin suizo, grupos ni clubes persistentes.
+- Etapa `contrato` = todo lo que consumen otras tareas: base, tipos, componentes del sistema, reglas puras y validadores. Así corren en paralelo con la base en la primera oleada.
+- Gates por ruta o archivo en las tareas de UI y de lógica para no correr `next build` en paralelo; el build va en T43 y en los e2e.
+- Tema oscuro único en el MVP; los tokens del claro quedan en globals.css para después.
