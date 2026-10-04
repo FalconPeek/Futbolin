@@ -543,7 +543,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el detalle muestra datos del partido, "Voy" / "No voy" mientras está programado, las listas de confirmados y de equipos A y B con goles y asistencias si finalizó, links de organizador a "Armar equipos" y "Cargar resultado", y MvpVote (elegir a un compañero que jugó y "Votá", "12 de 14 votaron" mientras está abierta, el MVP con Badge gold al cerrar); match-detail.test.tsx verifica el toggle, que MvpVote excluye al propio usuario y oculta los votos hasta cerrar, y que los links de organizador solo aparecen para el organizador
 - tests: src/components/matches/match-detail.test.tsx
 - gate: src/components/matches/match-detail.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T30 — Armar equipos
 - rol: frontend
@@ -583,7 +583,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: RatingForm muestra los 6 stats con las etiquetas del kind del calificado, un slider 1–99 por stat con el valor en font-display, precargado con la calificación previa propia o 60, aclara "Tu voto es anónimo" y "Guardar calificación" llama a rateTeammate; uno no puede entrar a calificarse a sí mismo; rating-form.test.tsx verifica etiquetas de campo y de arquero, la precarga y el payload
 - tests: src/components/cards/rating-form.test.tsx
 - gate: src/components/cards/rating-form.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T34 — Ranking del grupo
 - rol: frontend
@@ -613,7 +613,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: con el torneo en borrador, el organizador agrega equipos con nombre y un color de una paleta fija de 8 (el color solo como punto o franja), los renombra o quita, y "Empezar torneo" (deshabilitado con menos de 2) llama a startTournament; team-editor.test.tsx verifica agregar, quitar, el límite de 16 y el botón deshabilitado
 - tests: src/components/tournaments/team-editor.test.tsx
 - gate: src/components/tournaments/team-editor.test.tsx
-- estado: pendiente
+- estado: en_curso
 
 ### T37 — Llave de eliminación
 - rol: frontend
@@ -633,7 +633,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: en liga la vista tiene pestañas "Tabla" (StandingsTable con computeTeamStandings) y "Fixture" (FixtureList por fecha), en eliminación muestra Bracket, en borrador manda a cargar equipos, al finalizar muestra el campeón con Badge gold, y el organizador ve "Cargar resultado" en cada partido pendiente con ambos equipos; tournament-view.test.tsx verifica FixtureList agrupada por fecha y los links de carga solo para el organizador
 - tests: src/components/tournaments/tournament-view.test.tsx
 - gate: src/components/tournaments/tournament-view.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T39 — Cargar resultado de torneo
 - rol: frontend
@@ -653,7 +653,7 @@ Lo hace el director antes de la primera tanda (no es una tarea; el gate vacío t
 - criterio: el inicio muestra en tarjetas "Próximo partido" (MatchCard o vacío con "Crear partido"), "Pendientes" ("Votá al MVP" por cada partido jugado con votación abierta sin voto propio y "Calificá a tus compañeros" con la cantidad sin calificar) y "Torneos en curso" (TournamentCard); group-home.test.tsx verifica cada tarjeta con datos y vacía
 - tests: src/components/groups/group-home.test.tsx
 - gate: src/components/groups/group-home.test.tsx
-- estado: pendiente
+- estado: hecha
 
 ### T41 — PWA: manifest e íconos
 - rol: frontend
